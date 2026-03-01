@@ -1,4 +1,4 @@
-# VideoCategorizer
+# VideoAutoCategorizer
 
 一个基于 `tkinter` 的本地桌面工具，提供两大功能：
 
