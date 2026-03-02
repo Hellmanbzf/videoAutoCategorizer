@@ -16,12 +16,12 @@ from tkinter import filedialog, messagebox, ttk
 
 
 VIDEO_EXTS = {".mp4", ".mkv", ".rmvb", ".avi"}
-# 严格格式：可带前置数字，核心必须是 前缀+分隔符+数字（例如 393OTIM-441, FC2-PPV-123456）
+# 严格格式：可带前置数字，核心必须是 前缀+分隔符+数字
 CODE_STRICT_PATTERN = re.compile(
     r"(?<![A-Za-z0-9])(?:\d{1,4})?([A-Za-z][A-Za-z0-9]{1,7}(?:-[A-Za-z0-9]{2,8})?)\s*[-_ ]\s*(\d{2,8})(?!\d)",
     re.IGNORECASE,
 )
-# 宽松格式：无分隔符（例如 HIMO664）
+# 宽松格式：无分隔符
 CODE_LOOSE_PATTERN = re.compile(
     r"(?<![A-Za-z0-9])([A-Za-z]{3,8})\s*(\d{2,6})(?!\d)",
     re.IGNORECASE,
@@ -197,7 +197,7 @@ class App(tk.Tk):
         if not text:
             return ""
 
-        # 存在站点前缀时，只在最后一个 @ 后提取片号，避免 hhd800/kfa55 被当作编号
+        
         if "@" in text:
             text = text.rsplit("@", 1)[1]
 
@@ -230,7 +230,7 @@ class App(tk.Tk):
         if not candidates:
             return ""
 
-        # 优先严格匹配；同级选择更靠后的候选（更接近真实片号）
+        
         candidates.sort(key=lambda x: (x[0], x[1]), reverse=True)
         _, _, prefix, number = candidates[0]
         return f"{prefix}{number}"
@@ -1055,14 +1055,14 @@ class App(tk.Tk):
         if not s:
             return None
 
-        # FC2: FC2-字母-数字，允许后面有额外后缀，后缀忽略
+        
         m_fc2 = re.match(r"^FC2[- ]*([A-Z0-9]{2,12})[- ]*0*(\d{2,8})(?:\D.*)?$", s, re.IGNORECASE)
         if m_fc2:
             prefix = m_fc2.group(1).upper()
             number = str(int(m_fc2.group(2)))
             return f"FC2-{prefix}-{number}"
 
-        # 三位数字前缀：393OTIM-441 / 393OTIM-441-XXX -> 393OTIM-441
+        
         m_3 = re.match(r"^(\d{3})([A-Z]{2,8})[- ]*0*(\d{1,3})(?:\D.*)?$", s, re.IGNORECASE)
         if m_3:
             lead = m_3.group(1)
@@ -1070,7 +1070,7 @@ class App(tk.Tk):
             num = int(m_3.group(3))
             return f"{lead}{alpha}-{num:03d}"
 
-        # 普通字母+数字：MIDV-640-C_GG5 / MIDV640 / MIDV-640 -> MIDV-640
+        
         m_a = re.match(r"^([A-Z]{2,8})[- ]*0*(\d{1,4})(?:\D.*)?$", s, re.IGNORECASE)
         if m_a:
             alpha = m_a.group(1).upper()
