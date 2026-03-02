@@ -1570,7 +1570,7 @@ class App(tk.Tk):
             pass
 
     def _is_marked_transcoded(self, path: Path) -> bool:
-        return path.stem.endswith("_Hellman")
+        return path.stem.endswith("_AVC")
 
     def _cleanup_temp_file(self, path: Path):
         try:
@@ -1690,7 +1690,7 @@ class App(tk.Tk):
 
             if self._is_marked_transcoded(src_file):
                 skipped += 1
-                self._log(f"[T]跳过(已带_Hellman标识): {src_file}")
+                self._log(f"[T]跳过(已带_AVC标识): {src_file}")
                 self.after(0, self._set_transcode_progress, idx * 100 / total, f"已完成 {idx}/{total}")
                 self.after(0, self._set_transcode_file_progress, 100, f"当前文件已跳过: {src_file.name}")
                 continue
@@ -1797,7 +1797,7 @@ class App(tk.Tk):
                     temp_ready.unlink()
                 temp_out_tmp.rename(temp_ready)
 
-                target = src_file.with_name(f"{src_file.stem}_Hellman{src_file.suffix}")
+                target = src_file.with_name(f"{src_file.stem}_AVC{src_file.suffix}")
                 if target.exists():
                     target.unlink()
                 if src_file.exists():
